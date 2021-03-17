@@ -1,0 +1,5 @@
+# VS Code Cache
+.vscode/
+
+# MacOS Droppings
+.DS_Store
