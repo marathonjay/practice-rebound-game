@@ -40,21 +40,28 @@ function layoutPage() {
 }
 
 function keyListener(e) {
-  if ((e.keyCode == 37 || e.keyCode == 65) && paddleLeft > 0) {
+  let key = e.keyCode;
+  if ((key == 37 || key == 65) && paddleLeft > 0) {
     paddleLeft -= pdx;
     if (paddleLeft < 0)
       paddleLeft = 0;
-    paddle.style.left = paddleLeft + "px";
-  }
-  if ((e.keyCode == 39 || e.keyCode == 68) && paddleLeft < pWidth - 64) {
+  } else if ((key == 39 || key == 68) && paddleLeft < pWidth - 64) {
     paddleLeft += pdx;
     if (paddleLeft > pWidth - 64)
       paddleLeft = pWidth - 64;
-    paddle.style.left = paddleLeft + "px";
   }
-  console.log(paddleLeft);
+  paddle.style.left = paddleLeft + "px";
+}
 
-
+function start() {
+  render();
+  detectCollision();
+  difficulty();
+  if (ballTop < pHeight - 36) {
+    timer = setTimeout(start, 50);
+  } else {
+    gameOver();
+  }
 }
 
 
