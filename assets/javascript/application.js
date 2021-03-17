@@ -28,6 +28,7 @@ function init() {
   playingArea = document.getElementById("playingArea");
   document.addEventListener("keydown", keyListener, false);
   layoutPage();
+  timer = requestAnimationFrame(start);
 }
 
 function layoutPage() {
@@ -55,13 +56,72 @@ function keyListener(e) {
 
 function start() {
   render();
-  detectCollision();
+  detectCollisions();
   difficulty();
   if (ballTop < pHeight - 36) {
-    timer = setTimeout(start, 50);
+    timer = requestAnimationFrame(start);
   } else {
     gameOver();
   }
+}
+
+function render() {
+  moveBall();
+  updateScore();
+}
+
+function moveBall() {
+  ballLeft += dx;
+  ballTop += dy;
+  ball.style.left = ballLeft + "px";
+  ball.style.top = ballTop + "px";
+}
+
+function updateScore() {
+  currentScore += 5;
+  score.innerHTML = "Score: " + currentScore;
+}
+
+function detectCollisions() {
+  if (collisionX()) {
+    dx *= -1;
+  }
+  if (collisionY()) {
+    dy *= -1;
+  }
+}
+
+function collisionX() {
+  if (ballLeft < 4 || ballLeft > pWidth - 20) {
+    return true;
+  }
+}
+
+function collisionY() {
+  if (ballTop < 4) {
+    return true;
+  }
+  if (ballTop > pHeight - 64) {
+    if (ballLeft >= paddleLeft && ballLeft <= paddleLeft + 64) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function difficulty() {
+  if (currentScore % 1000 == 0) {
+    if (dy > 0) 
+      dy +=2;
+    else
+      dy -= 2;
+  }
+}
+
+function gameOver() {
+  cancelAnimationFrame(timer);
+  score.innerHTML += "    Game Over!";
+  score.style.backgroundColor = "red";
 }
 
 
