@@ -6,3 +6,5 @@ This is another practice file using LinkedIn Learning.  It is a game called Rebo
 
 The last two repos I have posted have both been related to this and serve as primers for it.
 
+It should also be said that I am push these practice projects to github in order to practice using github.
+
