@@ -144,7 +144,7 @@ function mouseUp(e) {
 
 function mouseMove(e) {
   if (drag) {
-    e.preventDefault();
+    // e.preventDefault();
     paddleLeft = e.clientX - 32 || e.targetTouches[0].pageX - 32;
     if (paddleLeft < 0)
       paddleLeft = 0;
