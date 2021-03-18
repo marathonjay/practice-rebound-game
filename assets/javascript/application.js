@@ -16,6 +16,7 @@ let timer;
 let paddleLeft = 228;
 let ballLeft = 100;
 let ballTop = 8;
+let drag = false;
 
 
 window.addEventListener("load", init);
@@ -26,8 +27,17 @@ function init() {
   paddle = document.getElementById("paddle");
   score = document.getElementById("score");
   playingArea = document.getElementById("playingArea");
-  document.addEventListener("keydown", keyListener, false);
   layoutPage();
+  document.addEventListener("keydown", keyListener, false);
+
+  playingArea.addEventListener("mousedown", mouseDown, false);
+  playingArea.addEventListener("mousemove", mouseMove, false);
+  playingArea.addEventListener("mouseup", mouseUp, false);
+
+  playingArea.addEventListener("touchstart", mouseDown, false);
+  playingArea.addEventListener("touchmove", mouseMove, false);
+  playingArea.addEventListener("touchend", mouseUp, false);
+  
   timer = requestAnimationFrame(start);
 }
 
@@ -122,6 +132,26 @@ function gameOver() {
   cancelAnimationFrame(timer);
   score.innerHTML += "    Game Over!";
   score.style.backgroundColor = "red";
+}
+
+function mouseDown(e) {
+  drag = true;
+}
+
+function mouseUp(e) {
+  drag = false;
+}
+
+function mouseMove(e) {
+  if (drag) {
+    e.preventDefault();
+    paddleLeft = e.clientX - 32 || e.targetTouches[0].pageX - 32;
+    if (paddleLeft < 0)
+      paddleLeft = 0;
+    if (paddleLeft > (pWidth - 64))
+      paddleLeft = pWidth - 64;
+    paddle.style.left = paddleLeft + "px";
+  }
 }
 
 
