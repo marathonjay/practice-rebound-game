@@ -22,6 +22,8 @@ let drag = false;
 window.addEventListener("load", init);
 window.addEventListener("resize", init);
 
+/*------------FUNCTION - INIT----------------------*/
+
 function init() {
   ball = document.getElementById("ball");
   paddle = document.getElementById("paddle");
@@ -41,6 +43,8 @@ function init() {
   timer = requestAnimationFrame(start);
 }
 
+/*------------FUNCTION - LAYOUT----------------------*/
+
 function layoutPage() {
   aWidth = innerWidth;
   aHeight = innerHeight;
@@ -49,6 +53,8 @@ function layoutPage() {
   playingArea.style.width = pWidth + "px";
   playingArea.style.height = pHeight + "px";
 }
+
+/*------------FUNCTION - KEY LISTENER----------------------*/
 
 function keyListener(e) {
   let key = e.keyCode;
@@ -64,6 +70,8 @@ function keyListener(e) {
   paddle.style.left = paddleLeft + "px";
 }
 
+/*------------FUNCTION - START----------------------*/
+
 function start() {
   render();
   detectCollisions();
@@ -75,10 +83,14 @@ function start() {
   }
 }
 
+/*------------FUNCTION - RENDER----------------------*/
+
 function render() {
   moveBall();
   updateScore();
 }
+
+/*------------FUNCTION - MOVE BALL----------------------*/
 
 function moveBall() {
   ballLeft += dx;
@@ -87,10 +99,14 @@ function moveBall() {
   ball.style.top = ballTop + "px";
 }
 
+/*------------FUNCTION - UPDATE SCORE----------------------*/
+
 function updateScore() {
   currentScore += 5;
   score.innerHTML = "Score: " + currentScore;
 }
+
+/*------------FUNCTION - DETECT COLLISIONS----------------------*/
 
 function detectCollisions() {
   if (collisionX()) {
@@ -101,23 +117,30 @@ function detectCollisions() {
   }
 }
 
+/*------------FUNCTION - COLLISION X ----------------------*/
+
 function collisionX() {
   if (ballLeft < 4 || ballLeft > pWidth - 20) {
     return true;
   }
 }
 
+/*------------FUNCTION - COLLISION Y ----------------------*/
+
 function collisionY() {
   if (ballTop < 4) {
     return true;
   }
   if (ballTop > pHeight - 64) {
+    
     if (ballLeft >= paddleLeft && ballLeft <= paddleLeft + 64) {
       return true;
     }
   }
   return false;
 }
+
+/*------------FUNCTION - DIFFICULTY----------------------*/
 
 function difficulty() {
   if (currentScore % 1000 == 0) {
@@ -128,23 +151,31 @@ function difficulty() {
   }
 }
 
+/*------------FUNCTION - GAME OVER----------------------*/
+
 function gameOver() {
   cancelAnimationFrame(timer);
   score.innerHTML += "    Game Over!";
   score.style.backgroundColor = "red";
 }
 
+/*------------FUNCTION - MOUSE DOWN----------------------*/
+
 function mouseDown(e) {
   drag = true;
 }
+
+/*------------FUNCTION - MOUSE UP----------------------*/
 
 function mouseUp(e) {
   drag = false;
 }
 
+/*------------FUNCTION - MOUSE MOVE----------------------*/
+
 function mouseMove(e) {
   if (drag) {
-    // e.preventDefault();
+    e.preventDefault();
     paddleLeft = e.clientX - 32 || e.targetTouches[0].pageX - 32;
     if (paddleLeft < 0)
       paddleLeft = 0;
