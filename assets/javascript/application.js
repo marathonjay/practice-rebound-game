@@ -8,6 +8,8 @@ let controls;
 let newButton;
 let difficultySelect;
 let doneButton;
+let snd;
+let music;
 
 
 let aWidth;
@@ -23,6 +25,14 @@ let paddleLeft = 228;
 let ballLeft = 100;
 let ballTop = 8;
 let drag = false;
+let sndEnabled = false;
+let musicEnabled = false;
+
+let beepX;
+let beepY;
+let beepPaddle;
+let beepGameOver;
+let bgMusic;
 
 
 window.addEventListener("load", init);
@@ -40,6 +50,9 @@ function init() {
   newButton = document.getElementById("new");
   difficultySelect = document.getElementById("difficulty");
   doneButton = document.getElementById("done");
+  snd = document.getElementById("snd");
+  music = document.getElementById("music");
+
   layoutPage();
   document.addEventListener("keydown", keyListener, false);
 
@@ -57,6 +70,11 @@ function init() {
   difficultySelect.addEventListener("change", function() {
     setDifficulty(difficultySelect.selectedIndex);
   }, false);
+  snd.addEventListener("click", toggleSound, false);
+  music.addEventListener("click", toggleMusic, false);
+
+
+
   
   timer = requestAnimationFrame(start);
 }
@@ -146,6 +164,7 @@ function detectCollisions() {
 
 function collisionX() {
   if (ballLeft < 4 || ballLeft > pWidth - 20) {
+    playSound(beepX);
     return true;
   }
 }
@@ -154,11 +173,13 @@ function collisionX() {
 
 function collisionY() {
   if (ballTop < 4) {
+    playSound(beepY);
     return true;
   }
   if (ballTop > pHeight - 64) {
     
     if (ballLeft >= paddleLeft && ballLeft <= paddleLeft + 64) {
+      playSound(beepPaddle);
       return true;
     }
   }
@@ -182,6 +203,7 @@ function gameOver() {
   cancelAnimationFrame(timer);
   score.innerHTML += "    Game Over!";
   score.style.backgroundColor = "red";
+  playSound(beepGameOver);
 }
 
 /*------------FUNCTION - MOUSE DOWN----------------------*/
@@ -210,16 +232,20 @@ function mouseMove(e) {
   }
 }
 
+/*------------FUNCTION - SHOW SETTINGS----------------------*/
+
 function showSettings() {
   controls.style.display = "block";
   cancelAnimationFrame(timer);
 }
 
+/*------------FUNCTION - HIDE SETTINGS----------------------*/
+
 function hideSettings() {
   controls.style.display = "none";
   timer = requestAnimationFrame(start);
-
 }
+/*------------FUNCTION - SET DIFFICULTY---------------------*/
 
 function setDifficulty(diff) {
   switch(diff) {
@@ -241,6 +267,7 @@ function setDifficulty(diff) {
   }
 }
 
+/*------------FUNCTION - NEW GAME---------------------*/
 
 function newGame() {
   ballTop = 8;
@@ -249,7 +276,69 @@ function newGame() {
   setDifficulty(difficultySelect.selectedIndex);
   score.style.backgroundColor = "rgb(32, 128, 64)";
   hideSettings();
+}
 
+/*------------FUNCTION - INIT AUDIO----------------------*/
+
+
+function initAudio() {
+  //load audio files
+  beepX = new Audio("assets/sounds/beepX.mp3");
+  beepY = new Audio("assets/sounds/beepY.mp3");
+  beepPaddle = new Audio("assets/sounds/beepPaddle.mp3");
+  beepGameOver = new Audio("assets/sounds/beepGameOver.mp3");
+  bgMusic = new Audio("assets/sounds/music.mp3");
+  //turn off volume
+  beepX.volume = 0;
+  beepY.volume = 0;
+  beepPaddle.volume = 0;
+  beepGameOver.volume = 0;
+  bgMusic.volume = 0;
+  //play each file
+  //this grants permission
+  beepX.play();
+  beepY.play();
+  beepPaddle.play();
+  beepGameOver.play();
+  bgMusic.play();
+  //pause each file
+  //this stores them in memory for later
+  beepX.pause();
+  beepY.pause();
+  beepPaddle.pause();
+  beepGameOver.pause();
+  bgMusic.pause();
+  //set the volume back for next time
+  beepX.volume = 1;
+  beepY.volume = 1;
+  beepPaddle.volume = 1;
+  beepGameOver.volume = 1;
+  bgMusic.volume = 1;
+}
+
+function toggleSound() {
+  if (beepX == null) {
+    initAudio();
+  }
+  sndEnabled = !sndEnabled;
+}
+
+function playSound(objSound) {
+  if(sndEnabled)
+    objSound.play();
+}
+
+function toggleMusic() {
+  if (bgMusic == null) {
+    initAudio();
+  }
+  if (musicEnabled)
+  bgMusic.pause();
+  else {
+    bgMusic.loop = true;
+    bgMusic.play()
+  };
+  musicEnabled = !musicEnabled;
 }
 
 

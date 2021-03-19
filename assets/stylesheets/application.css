@@ -70,3 +70,9 @@
     right: 20px;
     font-size: 2em;
 }
+
+fieldset {
+    text-align: left;
+    width: 70%;
+    margin: 10px auto;
+}
