@@ -3,6 +3,12 @@ let ball;
 let paddle;
 let score;
 let playingArea;
+let gear;
+let controls;
+let newButton;
+let difficultySelect;
+let doneButton;
+
 
 let aWidth;
 let aHeight;
@@ -29,6 +35,11 @@ function init() {
   paddle = document.getElementById("paddle");
   score = document.getElementById("score");
   playingArea = document.getElementById("playingArea");
+  gear = document.getElementById("gear");
+  controls = document.getElementById("controls");
+  newButton = document.getElementById("new");
+  difficultySelect = document.getElementById("difficulty");
+  doneButton = document.getElementById("done");
   layoutPage();
   document.addEventListener("keydown", keyListener, false);
 
@@ -39,9 +50,23 @@ function init() {
   playingArea.addEventListener("touchstart", mouseDown, false);
   playingArea.addEventListener("touchmove", mouseMove, false);
   playingArea.addEventListener("touchend", mouseUp, false);
+
+  gear.addEventListener("click", showSettings, false);
+  newButton.addEventListener("click", newGame, false);
+  doneButton.addEventListener("click", hideSettings, false);
+  difficultySelect.addEventListener("change", function() {
+    setDifficulty(difficultySelect.selectedIndex);
+  }, false);
   
   timer = requestAnimationFrame(start);
 }
+
+
+
+
+
+
+
 
 /*------------FUNCTION - LAYOUT----------------------*/
 
@@ -184,6 +209,63 @@ function mouseMove(e) {
     paddle.style.left = paddleLeft + "px";
   }
 }
+
+function showSettings() {
+  controls.style.display = "block";
+  cancelAnimationFrame(timer);
+}
+
+function hideSettings() {
+  controls.style.display = "none";
+  timer = requestAnimationFrame(start);
+
+}
+
+function setDifficulty(diff) {
+  switch(diff) {
+    case 0:
+      dy = 2;
+      pdx = 48;
+      break;
+    case 1:
+      dy = 4;
+      pdx = 32;
+      break;
+    case 2:
+      dy = 6;
+      pdx = 16;
+      break;
+    default:
+      dy = 2;
+      pdx = 48;
+  }
+}
+
+
+function newGame() {
+  ballTop = 8;
+  currentScore = 0;
+  dx = 2;
+  setDifficulty(difficultySelect.selectedIndex);
+  score.style.backgroundColor = "rgb(32, 128, 64)";
+  hideSettings();
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // Add your Javascript Here
 })
