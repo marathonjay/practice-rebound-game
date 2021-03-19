@@ -185,13 +185,5 @@ function mouseMove(e) {
   }
 }
 
-
-
-
-
-
-
-
-
   // Add your Javascript Here
 })
